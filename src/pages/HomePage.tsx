@@ -5,17 +5,17 @@ import ToolPanel from '../components/ToolPanel';
 const HomePage = () => {
   return (
     <>
-      <main className='relative'>
-        <div className='absolute inset-0 -z-10'>
+      <main className='relative min-h-[100dvh]'>
+        <div className='fixed inset-0 -z-10 h-full w-full'>
           <video autoPlay muted loop className='w-full h-full object-cover'>
             <source src='/video/background.mp4' type='video/mp4' />
           </video>
         </div>
 
-        <div className='relative flex flex-col md:flex-row h-screen px-[16px] py-[16px] gap-[16px]'>
+        <div className='relative flex flex-col md:flex-row min-h-screen items-center justify-center px-[30px] py-[16px] gap-[16px]'>
           {/* 왼쪽 - 캔버스 */}
           <div className='w-full md:flex-1 flex items-center justify-center'>
-            <div className='w-full max-w-[500px] aspect-square rounded-[16px] bg-white/20 backdrop-blur-md shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/20 flex items-center justify-center text-[30px] font-bold text-white'>
+            <div className='w-full max-w-[500px] rounded-[16px] bg-white/20 backdrop-blur-md shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/20 flex items-center justify-center text-[30px] font-bold text-white overflow-hidden'>
               <CanvasEditor />
             </div>
           </div>
