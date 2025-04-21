@@ -5,6 +5,9 @@ const CanvasEditor = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [strokeColor] = useState('#000000');
+
   useEffect(() => {
     if (!imageUrl || !canvasRef.current) return;
 
@@ -16,13 +19,11 @@ const CanvasEditor = () => {
     img.onload = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // 1. 이미지 및 캔버스 비율 계산
       const imgAspect = img.width / img.height;
       const canvasAspect = canvas.width / canvas.height;
 
       let drawWidth, drawHeight;
 
-      // 2. 더 긴 쪽에 맞춰서 축소 (비율 유지)
       if (imgAspect > canvasAspect) {
         drawWidth = canvas.width;
         drawHeight = canvas.width / imgAspect;
@@ -31,23 +32,60 @@ const CanvasEditor = () => {
         drawWidth = canvas.height * imgAspect;
       }
 
-      // 3. 중앙 정렬을 위한 오프셋
       const offsetX = (canvas.width - drawWidth) / 2;
       const offsetY = (canvas.height - drawHeight) / 2;
 
-      // 4. 이미지 캔버스에 그리기
       ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
     };
     img.src = imageUrl;
   }, [imageUrl]);
 
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const handleMouseDown = (e: MouseEvent) => {
+      ctx.beginPath();
+      ctx.moveTo(e.offsetX, e.offsetY);
+      setIsDrawing(true);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDrawing) return;
+      ctx.lineTo(e.offsetX, e.offsetY);
+      ctx.strokeStyle = strokeColor;
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    };
+
+    const handleMouseUp = () => {
+      setIsDrawing(false);
+    };
+
+    canvas.addEventListener('mousedown', handleMouseDown);
+    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mouseup', handleMouseUp);
+    canvas.addEventListener('mouseleave', handleMouseUp);
+
+    return () => {
+      canvas.removeEventListener('mousedown', handleMouseDown);
+      canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('mouseup', handleMouseUp);
+      canvas.removeEventListener('mouseleave', handleMouseUp);
+    };
+  }, [isDrawing, strokeColor]);
+
   return (
-    <div className='flex flex-col items-center'>
+    <div className='flex flex-col items-center gap-[12px]'>
       <canvas
         ref={canvasRef}
         width={500}
         height={500}
-        className='border border-white/50 bg-white/10'
+        className='border border-white/50 bg-white/10 cursor-crosshair'
       />
       <UploadButton onUpload={setImageUrl} />
     </div>
