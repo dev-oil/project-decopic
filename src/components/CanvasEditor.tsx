@@ -66,6 +66,18 @@ const CanvasEditor = ({ strokeColor }: Props) => {
     img.src = imageUrl;
   };
 
+  const handleDownload = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const image = canvas.toDataURL('image/png'); // base64 PNG 이미지 생성
+
+    const link = document.createElement('a');
+    link.href = image;
+    link.download = 'decopic.png';
+    link.click();
+  };
+
   useEffect(() => {
     if (!imageUrl || !canvasRef.current) return;
 
@@ -154,6 +166,12 @@ const CanvasEditor = ({ strokeColor }: Props) => {
           className='cursor-pointer my-[20px] px-[12px] py-[8px] bg-white/30 text-white font-medium text-xl rounded-md hover:bg-white/40 transition-all'
         >
           꾸미기 초기화
+        </button>
+        <button
+          onClick={handleDownload}
+          className='cursor-pointer my-[20px] px-[12px] py-[8px] bg-white/30 text-white font-medium text-xl rounded-md hover:bg-white/40 transition-all'
+        >
+          다운로드
         </button>
       </div>
     </div>
