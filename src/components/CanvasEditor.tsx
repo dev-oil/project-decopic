@@ -11,6 +11,61 @@ const CanvasEditor = ({ strokeColor }: Props) => {
 
   const [isDrawing, setIsDrawing] = useState(false);
 
+  const handleDrop = (e: React.DragEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const stickerSrc = e.dataTransfer.getData('sticker');
+    if (!stickerSrc) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const sticker = new Image();
+    sticker.onload = () => {
+      ctx.drawImage(sticker, x - 30, y - 30, 60, 60); // 가운데 정렬
+    };
+    sticker.src = stickerSrc;
+  };
+
+  const clearDrawings = () => {
+    const canvas = canvasRef.current;
+    if (!canvas || !imageUrl) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const img = new Image();
+    img.onload = () => {
+      const imgAspect = img.width / img.height;
+      const canvasAspect = canvas.width / canvas.height;
+
+      let drawWidth, drawHeight;
+
+      if (imgAspect > canvasAspect) {
+        drawWidth = canvas.width;
+        drawHeight = canvas.width / imgAspect;
+      } else {
+        drawHeight = canvas.height;
+        drawWidth = canvas.height * imgAspect;
+      }
+
+      const offsetX = (canvas.width - drawWidth) / 2;
+      const offsetY = (canvas.height - drawHeight) / 2;
+
+      ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+    };
+
+    img.src = imageUrl;
+  };
+
   useEffect(() => {
     if (!imageUrl || !canvasRef.current) return;
 
@@ -86,11 +141,21 @@ const CanvasEditor = ({ strokeColor }: Props) => {
     <div className='flex flex-col items-center gap-[12px]'>
       <canvas
         ref={canvasRef}
+        onDrop={handleDrop}
+        onDragOver={(e) => e.preventDefault()}
         width={500}
         height={500}
         className='border border-white/50 bg-white/10 cursor-crosshair'
       />
-      <UploadButton onUpload={setImageUrl} />
+      <div className='flex gap-[12px]'>
+        <UploadButton onUpload={setImageUrl} />
+        <button
+          onClick={clearDrawings}
+          className='cursor-pointer my-[20px] px-[12px] py-[8px] bg-white/30 text-white font-medium text-xl rounded-md hover:bg-white/40 transition-all'
+        >
+          꾸미기 초기화
+        </button>
+      </div>
     </div>
   );
 };
