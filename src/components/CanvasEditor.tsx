@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import UploadButton from './UploadButton';
 
-const CanvasEditor = () => {
+type Props = {
+  strokeColor: string;
+};
+
+const CanvasEditor = ({ strokeColor }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const [isDrawing, setIsDrawing] = useState(false);
-  const [strokeColor] = useState('#000000');
 
   useEffect(() => {
     if (!imageUrl || !canvasRef.current) return;
