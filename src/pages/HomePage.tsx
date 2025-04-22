@@ -11,7 +11,7 @@ const HomePage = () => {
       <main className='relative min-h-[100dvh]'>
         <div className='fixed inset-0 -z-10 h-full w-full'>
           <video autoPlay muted loop className='w-full h-full object-cover'>
-            <source src='/video/background.mp4' type='video/mp4' />
+            <source src='video/background.mp4' type='video/mp4' />
           </video>
         </div>
 

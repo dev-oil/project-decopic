@@ -1,9 +1,9 @@
 const STICKERS = [
-  '/image/sticker1.jpg',
-  '/image/sticker2.png',
-  '/image/sticker3.png',
-  '/image/sticker4.jpg',
-  '/image/sticker5.png',
+  'image/sticker1.jpg',
+  'image/sticker2.png',
+  'image/sticker3.png',
+  'image/sticker4.jpg',
+  'image/sticker5.png',
 ];
 
 const StickerPanel = () => {
