@@ -1,54 +1,64 @@
-# React + TypeScript + Vite
+# DecoPic
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+사진을 꾸미고 스티커를 붙여서 나만의 이미지를 만들 수 있는  
+**스티커 사진기 웹 앱**입니다.
 
-Currently, two official plugins are available:
+## 주요 기능
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 사진 업로드
+- 자유롭게 그림 그리기 (색상 선택)
+- 드래그 앤 드롭으로 스티커 붙이기
+- 그림만 초기화 or 전체 새로 시작
+- 완성된 이미지 PNG로 다운로드
 
-## Expanding the ESLint configuration
+## 배포 링크
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+[링크](https://dev-oil.github.io/project-decopic/)
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- GitHub Pages를 통해 정적 웹으로 배포
+
+---
+
+## 사용법
+
+1. **사진 업로드** 버튼으로 꾸밀 사진을 업로드하세요
+2. 좌측 캔버스에서 자유롭게 그림을 그릴 수 있어요
+3. 우측에서 스티커를 선택해 드래그 앤 드롭으로 붙여보세요
+4. **그림 초기화** 또는 **전체 초기화**로 상태를 리셋할 수 있어요
+5. 완성된 이미지를 **다운로드** 버튼으로 저장해보세요!
+
+---
+
+## 프로젝트 구조
+
 ```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+decopic/
+├── public/                           # 정적 파일 (그대로 복사됨)
+│   ├── video/
+│   │   └── background.mp4           # 배경 영상
+│   └── image/
+│       ├── sticker1.png             # 스티커 이미지들
+│       ├── sticker2.png
+│       └── ...
+│
+├── src/
+│   ├── components/                  # UI 컴포넌트
+│   │   ├── CanvasEditor.tsx         # 캔버스 그리기, 드로잉, 드롭 기능 포함
+│   │   ├── UploadButton.tsx         # 이미지 업로드 버튼
+│   │   ├── ToolPanel.tsx            # 색상 선택 + 펜/지우개 토글
+│   │   └── StickerPanel.tsx         # 스티커 목록 패널 (드래그 앤 드롭)
+│   │
+│   ├── pages/
+│   │   └── HomePage.tsx             # 전체 레이아웃과 상태 관리 (strokeColor 등)
+│   │
+│   ├── App.tsx                      # 루트 컴포넌트
+│   ├── main.tsx                     # 진입점
+│   └── index.css                    # TailwindCSS import
+│
+├── .gitignore
+├── index.html                       # Vite HTML entry
+├── package.json
+├── README.md
+├── tsconfig.json
+└── vite.config.ts                   # base 설정 포함
 ```
